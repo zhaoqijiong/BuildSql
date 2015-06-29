@@ -80,6 +80,20 @@ namespace BuildSql {
                     def.Account, def.Source);
         }
 
-        
+
+        public static List<ColumnDef> GetQueryType(string sql, string connectionString) {
+            DataTable dataTable = Select(sql, connectionString);
+            var s = new List<ColumnDef>();
+            foreach (DataColumn c in dataTable.Columns) {
+                s.Add(new ColumnDef() {
+                    AllowNull = c.AllowDBNull,
+                    ColumnType = c.DataType.ToString(),
+                    ColumnName = c.ColumnName,
+                    Length = c.MaxLength,
+                });
+            }
+
+            return s;
+        }
     }
 }

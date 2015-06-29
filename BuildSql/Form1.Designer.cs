@@ -33,6 +33,7 @@
             this.TxtCode = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.生成ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -63,14 +64,14 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(100, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem2.Text = "Add";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.OnClickAddDb);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -114,16 +115,24 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.生成ToolStripMenuItem});
+            this.生成ToolStripMenuItem,
+            this.查询ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(101, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
             // 
             // 生成ToolStripMenuItem
             // 
             this.生成ToolStripMenuItem.Name = "生成ToolStripMenuItem";
-            this.生成ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.生成ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.生成ToolStripMenuItem.Text = "生成";
-            this.生成ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
+            this.生成ToolStripMenuItem.Click += new System.EventHandler(this.BuildCSharp);
+            // 
+            // 查询ToolStripMenuItem
+            // 
+            this.查询ToolStripMenuItem.Name = "查询ToolStripMenuItem";
+            this.查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.查询ToolStripMenuItem.Text = "查询";
+            this.查询ToolStripMenuItem.Click += new System.EventHandler(this.OnTableQuery);
             // 
             // Form1
             // 
@@ -159,6 +168,7 @@
         private System.Windows.Forms.TextBox TxtCode;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 生成ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 查询ToolStripMenuItem;
     }
 }
 

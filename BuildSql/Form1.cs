@@ -121,8 +121,6 @@ namespace BuildSql {
         }
 
         private void OnClickConnectDef(ConnectDef d, TreeNode n) {
-            
-
             var r = SqlHelper.GetAllDatabase(SqlHelper.MakeConnectStr(d));
             foreach (var db in r) {
                 var data = new DbNode() {
@@ -166,12 +164,6 @@ namespace BuildSql {
             }
         }
 
-        private void ToolStripMenuItem_Click(object sender, EventArgs e) {
-            var tableNode = currentTreeNode.Tag as TableNode;
-
-            var r = SqlHelper.GetAllColumn(tableNode.TableName, tableNode.DbName, SqlHelper.MakeConnectStr(tableNode.Def));
-            TxtCode.Text = OutEntityCClass(tableNode.TableName, r);
-        }
 
         public string OutEntityCClass(string tableName, List<ColumnDef> controlTexts) {
             var sb = new StringBuilder();
@@ -245,7 +237,42 @@ namespace BuildSql {
         }
 
         private void TxtCode_MouseDoubleClick(object sender, MouseEventArgs e) {
-            Clipboard.SetDataObject(TxtCode.Text); 
+            Clipboard.SetDataObject(TxtCode.Text);
+        }
+
+        private void OnTableQuery(object sender, EventArgs e) {
+
+            QueryForm f = new QueryForm();
+            var d = f.ShowDialog();
+
+            if (d == DialogResult.OK) {
+                var tableNode = currentTreeNode.Tag as TableNode;
+                var sql = string.Format("use {0};{1}", tableNode.DbName, f.Sql);
+                var dt = SqlHelper.GetQueryType(sql, SqlHelper.MakeConnectStr(tableNode.Def));
+
+                TxtCode.Text = OutEntityCClassR(tableNode.TableName, dt);
+            }
+        }
+
+        public string OutEntityCClassR(string tableName, List<ColumnDef> controlTexts) {
+            var sb = new StringBuilder();
+
+            sb.AppendFormat("/// <summary>\r\n/// 数据库表{0}所对应的实体类\r\n/// </summary>\r\npublic class {0}Entity\r\n{{\r\n", tableName);
+
+            foreach (var s in controlTexts) {
+                sb.AppendFormat("\t/// <summary>\r\n\t///设置或返回值{0}\r\n\t/// </summary>\r\n", s.ColumnName);
+                sb.AppendFormat("\tpublic {1} {0} {{ get; set; }}\r\n\r\n", s.ColumnName, s.ColumnType);
+            }
+
+            sb.Append("}\r\n");
+            return sb.ToString();
+        }
+
+        private void BuildCSharp(object sender, EventArgs e) {
+            var tableNode = currentTreeNode.Tag as TableNode;
+
+            var r = SqlHelper.GetAllColumn(tableNode.TableName, tableNode.DbName, SqlHelper.MakeConnectStr(tableNode.Def));
+            TxtCode.Text = OutEntityCClass(tableNode.TableName, r);
         }
     }
 }
