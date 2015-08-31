@@ -29,6 +29,10 @@ namespace BuildSql.Models {
 
             var configXml = "config.xml";
 
+            if (System.IO.File.Exists(configXml)) {
+                File.Delete(configXml);
+            }
+
             using (var fs = new System.IO.FileStream(configXml, FileMode.OpenOrCreate)) {
                 s.Serialize(fs, this);
             }

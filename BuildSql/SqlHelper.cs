@@ -83,6 +83,10 @@ namespace BuildSql {
 
         public static List<ColumnDef> GetQueryType(string sql, string connectionString) {
             DataTable dataTable = Select(sql, connectionString);
+            if (dataTable == null) {
+                return null;
+            }
+
             var s = new List<ColumnDef>();
             foreach (DataColumn c in dataTable.Columns) {
                 s.Add(new ColumnDef() {

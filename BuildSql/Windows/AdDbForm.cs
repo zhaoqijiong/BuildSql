@@ -40,6 +40,8 @@ namespace BuildSql.Windows {
 
         private void BtnTest_Click(object sender, EventArgs e) {
             var b = SqlHelper.TestConnect(txtSource.Text.Trim(), txtAccount.Text.Trim(), txtPass.Text.Trim());
+
+            MessageBox.Show(b.ToString());
         }
        
     }

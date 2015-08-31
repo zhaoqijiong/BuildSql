@@ -65,6 +65,8 @@ namespace BuildSql {
             if (c == DialogResult.OK) {
                 connectDefs.Defines.Add(f.GetDefine());
                 connectDefs.Save();
+
+                GetConfig();
             }
 
         }
@@ -86,6 +88,8 @@ namespace BuildSql {
         }
 
         private void OnClickTableNode(TableNode tableNode, TreeNode n) {
+            n.Nodes.Clear();
+
             var r = SqlHelper.GetAllColumn(tableNode.TableName, tableNode.DbName, SqlHelper.MakeConnectStr(tableNode.Def));
             foreach (var db in r) {
 
@@ -103,6 +107,8 @@ namespace BuildSql {
         }
 
         private void OnClickDbNode(DbNode dbNode, TreeNode n) {
+            n.Nodes.Clear();
+
             var r = SqlHelper.GetAllTables(dbNode.DbName,SqlHelper.MakeConnectStr(dbNode.Def));
             foreach (var db in r) {
                 var data = new TableNode() {
@@ -121,6 +127,9 @@ namespace BuildSql {
         }
 
         private void OnClickConnectDef(ConnectDef d, TreeNode n) {
+
+            n.Nodes.Clear();
+
             var r = SqlHelper.GetAllDatabase(SqlHelper.MakeConnectStr(d));
             foreach (var db in r) {
                 var data = new DbNode() {
@@ -156,9 +165,15 @@ namespace BuildSql {
                 currentTreeNode = TreeSql.GetNodeAt(p);
 
                 if (currentTreeNode != null) {
+                    TreeSql.SelectedNode = currentTreeNode;
+
                     if (currentTreeNode.Tag is TableNode) {
                         contextMenuStrip1.Show(TreeSql.PointToScreen(p));
                         
+                    }
+
+                    if (currentTreeNode.Tag is ConnectDef) {
+                        contextMenuStrip2.Show(TreeSql.PointToScreen(p));
                     }
                 }
             }
@@ -250,6 +265,10 @@ namespace BuildSql {
                 var sql = string.Format("use {0};{1}", tableNode.DbName, f.Sql);
                 var dt = SqlHelper.GetQueryType(sql, SqlHelper.MakeConnectStr(tableNode.Def));
 
+                if (dt == null) {
+                    return;
+                }
+
                 TxtCode.Text = OutEntityCClassR(tableNode.TableName, dt);
             }
         }
@@ -273,6 +292,16 @@ namespace BuildSql {
 
             var r = SqlHelper.GetAllColumn(tableNode.TableName, tableNode.DbName, SqlHelper.MakeConnectStr(tableNode.Def));
             TxtCode.Text = OutEntityCClass(tableNode.TableName, r);
+        }
+
+        private void OnClickDelConnect(object sender, EventArgs e) {
+            var tableNode = currentTreeNode.Tag as ConnectDef;
+            connectDefs.Defines.Remove(tableNode);
+
+            
+            connectDefs.Save();
+
+            GetConfig();
         }
     }
 }
